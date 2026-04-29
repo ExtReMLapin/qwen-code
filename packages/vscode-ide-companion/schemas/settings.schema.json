@@ -2007,6 +2007,10 @@
         }
       }
     },
+    "proxy": {
+      "description": "HTTP/HTTPS proxy URL used for outbound network calls (e.g. http://user:pass@host:port). The --proxy CLI flag and HTTPS_PROXY/HTTP_PROXY environment variables take precedence over this value.",
+      "type": "string"
+    },
     "experimental": {
       "description": "Settings to enable experimental features.",
       "type": "object",

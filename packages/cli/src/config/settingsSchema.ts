@@ -1854,6 +1854,17 @@ const SETTINGS_SCHEMA = {
     },
   },
 
+  proxy: {
+    type: 'string',
+    label: 'HTTP Proxy',
+    category: 'Advanced',
+    requiresRestart: true,
+    default: undefined as string | undefined,
+    description:
+      'HTTP/HTTPS proxy URL used for outbound network calls (e.g. http://user:pass@host:port). The --proxy CLI flag and HTTPS_PROXY/HTTP_PROXY environment variables take precedence over this value.',
+    showInDialog: false,
+  },
+
   experimental: {
     type: 'object',
     label: 'Experimental',

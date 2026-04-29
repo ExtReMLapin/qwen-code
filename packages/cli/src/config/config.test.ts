@@ -799,6 +799,39 @@ describe('loadCliConfig', () => {
       const config = await loadCliConfig(settings, argv);
       expect(config.getProxy()).toBe('http://localhost:7890');
     });
+
+    it('should set proxy from settings.json when no CLI flag or env var is set', async () => {
+      process.argv = ['node', 'script.js'];
+      const argv = await parseArguments();
+      const settings: Settings = { proxy: 'http://settings-proxy:8080' };
+      const config = await loadCliConfig(settings, argv);
+      expect(config.getProxy()).toBe('http://settings-proxy:8080');
+    });
+
+    it('should prioritize settings.json over environment variable for proxy', async () => {
+      vi.stubEnv('http_proxy', 'http://env-proxy:7891');
+      process.argv = ['node', 'script.js'];
+      const argv = await parseArguments();
+      const settings: Settings = { proxy: 'http://settings-proxy:8080' };
+      const config = await loadCliConfig(settings, argv);
+      expect(config.getProxy()).toBe('http://settings-proxy:8080');
+    });
+
+    it('should prioritize CLI flag over settings.json for proxy', async () => {
+      process.argv = ['node', 'script.js', '--proxy', 'http://cli-proxy:7890'];
+      const argv = await parseArguments();
+      const settings: Settings = { proxy: 'http://settings-proxy:8080' };
+      const config = await loadCliConfig(settings, argv);
+      expect(config.getProxy()).toBe('http://cli-proxy:7890');
+    });
+
+    it('should normalize a settings.json proxy value without protocol prefix', async () => {
+      process.argv = ['node', 'script.js'];
+      const argv = await parseArguments();
+      const settings: Settings = { proxy: '127.0.0.1:7860' };
+      const config = await loadCliConfig(settings, argv);
+      expect(config.getProxy()).toBe('http://127.0.0.1:7860');
+    });
   });
 });
 
